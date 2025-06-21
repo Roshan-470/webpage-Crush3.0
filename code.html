@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>C-Rush 3.0</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+      color: #ffffff;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Animated background particles */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .particle {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: #00d4ff;
+      border-radius: 50%;
+      animation: float 6s infinite linear;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100px) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* Header Styles */
+    header {
+      text-align: center;
+      padding: 3rem 2rem;
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+      background-size: 400% 400%;
+      animation: gradientShift 8s ease infinite;
+      position: relative;
+      overflow: hidden;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 2px,
+        rgba(255,255,255,0.1) 2px,
+        rgba(255,255,255,0.1) 4px
+      );
+      animation: slide 20s linear infinite;
+    }
+
+    @keyframes slide {
+      0% { transform: translateX(-50%) translateY(-50%) rotate(0deg); }
+      100% { transform: translateX(-50%) translateY(-50%) rotate(360deg); }
+    }
+
+    header h1 {
+      font-size: 4rem;
+      font-weight: 900;
+      text-shadow: 3px 3px 0px #000, 6px 6px 20px rgba(0,0,0,0.8);
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 1;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    header h4 {
+      font-size: 1.2rem;
+      font-weight: 300;
+      text-shadow: 2px 2px 10px rgba(0,0,0,0.7);
+      position: relative;
+      z-index: 1;
+      animation: fadeInUp 1s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Navigation Styles */
+    nav {
+      background: rgba(0, 0, 0, 0.9);
+      padding: 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+      border-bottom: 2px solid #00d4ff;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+
+    nav a {
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 0.8rem 1.5rem;
+      border-radius: 25px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    nav a::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: all 0.5s;
+    }
+
+    nav a:hover::before {
+      left: 100%;
+    }
+
+    nav a:hover {
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0, 212, 255, 0.3);
+    }
+
+    /* Section Styles */
+    section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+      position: relative;
+    }
+
+    section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #00d4ff, transparent);
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow {
+      from { box-shadow: 0 0 5px #00d4ff; }
+      to { box-shadow: 0 0 20px #00d4ff, 0 0 30px #00d4ff; }
+    }
+
+    h2 {
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+      text-align: center;
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: fadeInUp 1s ease-out;
+    }
+
+    h3 {
+      font-size: 1.8rem;
+      margin: 2rem 0 1rem 0;
+      color: #00d4ff;
+      position: relative;
+    }
+
+    h3::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 50px;
+      height: 3px;
+      background: linear-gradient(90deg, #ff6b6b, #4ecdc4);
+      border-radius: 2px;
+    }
+
+    p {
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+      text-align: justify;
+      animation: fadeIn 1s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Event Cards */
+    article {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 15px;
+      padding: 2rem;
+      margin: 2rem 0;
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    article::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(0,212,255,0.1) 0%, transparent 70%);
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    article:hover::before {
+      opacity: 1;
+      animation: rotate 3s linear infinite;
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    article:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
+      border-color: #00d4ff;
+    }
+
+    /* Lists */
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    li {
+      padding: 0.5rem 0;
+      position: relative;
+      padding-left: 2rem;
+    }
+
+    li::before {
+      content: '▶';
+      position: absolute;
+      left: 0;
+      color: #00d4ff;
+      font-weight: bold;
+    }
+
+    /* Form Styles */
+    form {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 2rem;
+      border-radius: 15px;
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      backdrop-filter: blur(10px);
+    }
+
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: 600;
+      color: #00d4ff;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 0.8rem;
+      margin-top: 0.5rem;
+      border: 2px solid rgba(0, 212, 255, 0.3);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #00d4ff;
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+      transform: scale(1.02);
+    }
+
+    input[type="submit"] {
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    input[type="submit"]:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4);
+    }
+
+    input[type="checkbox"] {
+      width: auto;
+      margin-right: 0.5rem;
+    }
+
+    /* Details and Summary */
+    details {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      padding: 1rem;
+      margin: 1rem 0;
+      border: 1px solid rgba(0, 212, 255, 0.2);
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: bold;
+      color: #00d4ff;
+      padding: 0.5rem;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+
+    summary:hover {
+      background: rgba(0, 212, 255, 0.1);
+    }
+
+    /* iframe */
+    iframe {
+      border-radius: 15px;
+      border: 2px solid #00d4ff;
+      box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+    }
+
+    /* Footer */
+    footer {
+      background: linear-gradient(45deg, #0a0a0a, #1a1a2e);
+      text-align: center;
+      padding: 3rem 2rem;
+      margin-top: 3rem;
+      border-top: 2px solid #00d4ff;
+    }
+
+    footer a {
+      color: #00d4ff;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    footer a:hover {
+      color: #ff6b6b;
+      text-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 2.5rem;
+      }
+
+      nav ul {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      section {
+        padding: 2rem 1rem;
+      }
+
+      h2 {
+        font-size: 2rem;
+      }
+
+      article {
+        padding: 1.5rem;
+      }
+    }
+
+    /* Scroll animations */
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .slide-in-left {
+      animation: slideInLeft 1s ease-out;
+    }
+
+    .slide-in-right {
+      animation: slideInRight 1s ease-out;
+    }
+
+    /* Glowing text effect */
+    .glow-text {
+      animation: textGlow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes textGlow {
+      from {
+        text-shadow: 0 0 10px #00d4ff, 0 0 20px #00d4ff;
+      }
+      to {
+        text-shadow: 0 0 20px #00d4ff, 0 0 30px #00d4ff, 0 0 40px #00d4ff;
+      }
+    }
+
+    hr {
+      border: none;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #00d4ff, transparent);
+      margin: 2rem 0;
+      border-radius: 1px;
+    }
+
+    pre {
+      background: rgba(0, 0, 0, 0.5);
+      padding: 1rem;
+      border-radius: 8px;
+      border-left: 4px solid #00d4ff;
+      overflow-x: auto;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <!-- Animated particles background -->
+  <div class="particles" id="particles"></div>
+
+  <header>
+    <h1>🚀C-Rush 3.0</h1>
+    <p><h4>C in your blood, fire in your soul,<br>
+    C-Rush 3.0 is the final goal.<br>
+    Think. Type. Dominate.<br>
+    The code gods await.</h4></p>
+  </header>
+
+  <nav>
+    <ul>
+      <li><a href="#about">About Event</a></li>
+      <li><a href="#events">Event List</a></li>
+      <li><a href="#register">Register Now</a></li>
+      <li><a href="#contact">Contact Us</a></li>
+    </ul>
+  </nav>
+
+  <section id="about" class="slide-in-left">
+    <h2>📢 About the Event</h2>
+    <p>📌 <b>C-Rush 3.0</b> is a high-voltage C programming competition designed to push your logic, speed, and problem-solving skills to the edge. Compete against the sharpest minds and prove you've got what it takes to dominate the world of code!</p>
+    
+    <p class="glow-text">📌 "<b>C</b> the Challenge. <b>Rush</b> to Victory."</p>
+
+    <h2>📌 Details of an event</h2>
+    <p><b>• Dates:</b> 10th March – 12th March 2025<br>
+       <b>• Location:</b> Government College of Engineering Yavatmal<br>
+       <b>• Time:</b> 11 am onwards<br>
+       <b>• Mode:</b> Offline</p>
+     
+    <h3>• What is in it for you?</h3> 
+    <ul>
+      <li>💰 Cash Prize Pool: ₹10,000</li>
+      <li>🏅 Certificates for All Participants</li>
+      <li>🎁 Exclusive Goodies for Winners</li>
+      <li>🚀 Networking with top coders across the state</li>
+    </ul>
+    
+    <h3>• 🎓 Who Can Register?</h3>
+    <ul>
+      <li>Open to 1st – 4th year B.Tech students (All branches welcome!)</li>
+      <li>Basic knowledge of C programming is enough — we care more about logic than syntax.</li>
+    </ul>
+    
+    <h4 class="glow-text">🔐 Limited Slots Only! Don't miss your shot at glory — register now and rise above the rest.</h4>
+  </section>
+
+  <section id="events" class="slide-in-right">
+    <h2>🎮 Event List</h2>
+    <article>
+      <h3>1. Blind C Programming</h3>
+      <p><b>Blind C</b> is the ultimate test of pure logic and muscle memory — code without a screen, no syntax help, just raw C power. It's you vs. the keyboard… can your mind write what your eyes can't see?</p>
+    </article>
+    
+    <article>
+      <h3>2. C Hunt</h3>
+      <p><b>C Hunt</b> is a logic-packed coding adventure where participants solve C programming puzzles, decode clues, and race to reach the final challenge. It's not just coding — it's a hunt for the smartest mind on campus!</p>
+    </article>
+    
+    <article>
+      <h3>3. CodeWar</h3>
+      <p><b>Code War</b> is a head-to-head coding showdown where speed meets logic and only the quickest minds survive. Solve real-time challenges, outsmart your rivals, and dominate the battlefield of code!</p>
+      <details>
+        <summary>Details</summary>
+        <h2>🚀 MINI C HACKATHON: "CodeWar"</h2>
+        <p>Language: C Programming<br>
+        Mode: Offline/Online<br>
+        Level: Beginner to Intermediate<br>
+        Time Limit: 2 hours<br>
+        Tools Allowed: Code::Blocks, GCC, Turbo C, VS Code, or any C IDE</p>
+
+        <h3>📝 General Instructions:</h3>
+        <p>1. All code must be written in C language only.<br>
+        2. Use standard input/output (no GUI or external libraries).<br>
+        3. Code should be well-commented and modular.<br>
+        4. Participants must submit both: .c file (source code)<br>
+        5. Internet usage is not allowed (for offline mode).<br>
+        6. Bonus marks for optimization and edge-case handling.</p>
+
+        <h3>🔒 RULES:</h3>
+        <p>Team size: Solo or max 2 members<br>
+        No plagiarism – Original code only<br>
+        Judging Criteria:<br>
+        Code logic (40%)<br>
+        Output correctness (30%)<br>
+        Optimization (20%)<br>
+        Readability & Comments (10%)</p>
+
+        <h3>💻 PROBLEM STATEMENTS</h3>
+        
+        <h4>🧠 Problem 1: "Find the Strongest"</h4>
+        <p>Write a program to take N integers and print the largest prime number among them. If no prime is found, print No prime number found.</p>
+        <p>Sample Input:<br>
+        N = 5<br>
+        Array: 4 15 7 9 11<br>
+        Output:<br>
+        Strongest prime: 11</p>
+
+        <h4>🔁 Problem 2: "Pattern Puzzle"</h4>
+        <p>Given an odd number N, print the following pattern:</p>
+        <p>Input: 5</p>
+        <pre>Output:
+*       *
+ *     * 
+  *   *  
+   * *   
+    *</pre>
+        <p>Bonus: Try to write logic using nested loops only.</p>
+
+        <h4>⏱ Problem 3: "Smart Clock"</h4>
+        <p>Write a program that takes input in seconds and converts it into HH:MM:SS format.</p>
+        <p>Input: 3661<br>
+        Output: 01:01:01</p>
+
+        <h4>🔄 Problem 4: "Reverse It Like a Pro"</h4>
+        <p>Take a number N and reverse it without using strings or arrays.</p>
+        <p>Input: 12345<br>
+        Output: 54321<br>
+        Edge Case: If input is 1000, output should be 1 (not 0001).</p>
+
+        <h4>📊 Problem 5: "Matrix Magic"</h4>
+        <p>Take a 3x3 matrix as input and check...</p>
+      </details>
+    </article>
+  </section>
+
+  <section id="register" class="slide-in-left">
+    <h2>📝 Registration Form</h2>
+    <form>
+      <label for="name">Full Name:</label>
+      <input type="text" id="name" name="name" required>
+
+      <label for="branch">Branch:</label>
+      <select id="branch" name="branch">
+        <option>Computer</option>
+        <option>EXTC</option>
+        <option>Mechanical</option>
+        <option>Civil</option>
+      </select>
+
+      <label>Choose Events:</label>
+      <input type="checkbox" id="c1" name="event1">
+      <label for="c1">Blind C</label>
+      <input type="checkbox" id="c2" name="event2">
+      <label for="c2">CodeWar</label>
+      <input type="checkbox" id="c3" name="event3">
+      <label for="c3">C Hunt</label>
+c:\Users\ASUS\OneDrive\Desktop\1.jpg
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required>
+
+      <label for="comments">Any Message:</label>
+      <textarea id="comments" name="comments" rows="3" cols="30"></textarea>
+
+      <input type="submit" value="Submit">
+    </form>
+  </section>
+
+  <section id="media" class="slide-in-right">
+    <h2>🎥 Previous Event Highlights</h2>
+     <img src="image1.jpg.jpg" alt="photo" width="400">
+    <img src="2.jpg.jpg" alt="photo" width="400">
+     <img src="3.jpg.jpg" alt="photo" width="400">
+     
+       <img src="5.jpg.jpg" alt="photo" width="600">
+       <img src="6.jpg.jpg" alt="photo" width="600">
+   
+    
+  </section>
+
+  <footer id="contact">
+    <h2>Organised By</h2>
+    <p><b>Nikhil Khandare and Ajinkya Nishane</b></p>
+    <img src="nikhil.jpg.png" alt="photo" width="300">
+    <p>Nikhil Khandare: <a href="https://www.linkedin.com/in/nikhilkandhare/">LinkedIn</a></p>
+   <hr>
+    <img src="ajinkya.jpg.png" alt="photo" width="300">
+    <p>Ajinkya Nishane: <a href="https://www.linkedin.com/in/ajinkyanishane?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3BZJn5SNVlRPmK6KYZpKkHkA%3D%3D">LinkedIn</a></p>
+   
+    <hr>
+    
+    <p>Phone: +91 9579706283 or 95625556656</p>
+    <p><b>Powered By <b>TEAM GCOEY</b></b></p>
+    <p>Instagram: @GCOEY_Stu_community</p>
+    <p>&copy; 2025 DBATU TechFest. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Create animated particles
+    function createParticles() {
+      const particlesContainer = document.getElementById('particles');
+      const particleCount = 50;
+
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 6 + 's';
+        particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+        particlesContainer.appendChild(particle);
+      }
+    }
+
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('nav a').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      });
+    });
+
+    // Initialize particles when page loads
+    window.addEventListener('load', createParticles);
+
+    // Add scroll animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.animation = 'fadeInUp 1s ease-out forwards';
+        }
+      });
+    }, observerOptions);
+
+    // Observe all sections for scroll animations
+    document.querySelectorAll('section').forEach(section => {
+      observer.observe(section);
+    });
+  </script>
+</body>
+</html>
