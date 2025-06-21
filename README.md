@@ -1,6 +1,6 @@
 # 🚀 C-Rush 3.0 - TechFest Event Website
 
-![C-Rush Banner](https://your-image-url-if-any.com/banner.jpg)
+![C-Rush Banner](https://raw.githubusercontent.com/Roshan-470/webpage-Crush3.0/46d556d4daedd9bc99300956045773193e30cd9d/Screenshot%202025-06-21%20171136.png)
 
 > **"C in your blood, fire in your soul — C-Rush 3.0 is the final goal."**
 
